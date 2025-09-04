@@ -1,7 +1,8 @@
-import type { RozContent, RozContentType } from "@roze/types/roz";
+import type { RozContent } from "@roze/types/roz";
 import { generate_text_structure } from "@roze/utils";
-import { Dimensions, Text, type TextStyle } from "react-native";
+import { Dimensions, Text } from "react-native";
 import ScaledImage from "./ScaledImage";
+import { text_style_map } from "@roze/mobile/text_style";
 
 export interface RozContentStyle {
 	text_color: string;
@@ -13,18 +14,6 @@ export interface RozContentRendererProps {
 	style: RozContentStyle;
 }
 
-const text_style_map: Record<RozContentType, (text_color: string) => TextStyle> = {
-	TITLE: (text_color) => ({ color: text_color, fontWeight: "900", fontSize: 28 }),
-	CHAPTER_TITLE: (text_color) => ({ color: text_color, fontWeight: "800", fontSize: 24 }),
-	SECTION_TITLE: (text_color) => ({ color: text_color, fontWeight: "600", fontSize: 20 }),
-	CHAPTER_SUBTITLE: (text_color) => ({ color: text_color, fontWeight: "600", fontSize: 20 }),
-	HEADING: (text_color) => ({ color: text_color, fontWeight: "400", fontSize: 16 }),
-	PARAGRAPH: (text_color) => ({ color: text_color, fontWeight: "400", fontSize: 14 }),
-	IMAGE: () => ({}),
-	LINE_BREAK: () => ({}),
-	THEME_BREAK: () => ({})
-};
-
 const screen_dimensions = Dimensions.get("screen");
 
 export function RozContentRenderer(props: RozContentRendererProps) {
@@ -35,6 +24,7 @@ export function RozContentRenderer(props: RozContentRendererProps) {
 		case "CHAPTER_SUBTITLE":
 		case "HEADING":
 		case "PARAGRAPH":
+		case "TABLE_OF_CONTENTS_CHAPTER":
 		case "LINE_BREAK":
 		case "THEME_BREAK":
 			const text_style = text_style_map[props.roz_content.type](props.style.text_color);
